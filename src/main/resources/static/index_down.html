@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Demo</title>
+    <!-- 引入 echarts.js -->
+    <script src="js/echarts.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/echarts-liquidfill.min.js"></script>
+
+    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+
+
+    <script type="text/javascript">
+        function init_action_good_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var echartsOption = {
+                title: {
+                    text: '课堂参与度走势图'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['听课', '写字', '读书']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        boundaryGap: false,
+                        data: []
+                    }
+                ],
+                yAxis: [
+                    {
+                        max: 50,
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '听课',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    },
+                    {
+                        name: '写字',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    },
+                    {
+                        name: '读书',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    }
+                ],
+                // animationDuration: function (idx) {
+                //     return 400;
+                // }
+            };
+
+            myChart.setOption(echartsOption);
+
+            return myChart;
+        }
+
+        function init_action_bad_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var echartsOption = {
+                title: {
+                    text: '课堂参与度走势图'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['趴桌子', '玩', '扭头', '交谈']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        boundaryGap: false,
+                        data: []
+                    }
+                ],
+                yAxis: [
+                    {
+                        max: 50,
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '趴桌子',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    },
+                    {
+                        name: '玩',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    },
+                    {
+                        name: '扭头',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    },
+                    {
+                        name: '交谈',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: [],
+                        smooth: true
+                    }
+                ],
+                // animationDuration: function (idx) {
+                //     return 400;
+                // }
+            };
+
+            myChart.setOption(echartsOption);
+
+            return myChart;
+        }
+
+        var maxXpointCount = 20;
+        var stu_state_count = 7;
+
+        var timeline = [];
+        for(var i=0; i<maxXpointCount; i++) {
+            timeline.push('0');
+        }
+
+        var action_data = [];
+        for(var out_i=0; out_i<stu_state_count; out_i++) {
+            var inner = [];
+            for(var in_j=0; in_j<maxXpointCount; in_j++) {
+                inner.push(0);
+            }
+            action_data.push(inner);
+        }
+
+        function update_echarts_data(good_chart, bad_chart) {
+            $.ajax({
+                type: "get",
+                url: "/api/getLastActionData",
+                data: {},
+                dataType: "json",
+                success: function (result) {
+                    if (result && result.length > 0) {
+                        var states = [0, 0, 0, 0, 0, 0, 0];
+                        for (var reuslt_idx = 0; reuslt_idx < result.length; reuslt_idx++) {
+                            states[result[reuslt_idx]["state"]] += 1
+                        }
+
+                        var year = result[0]['year'];
+                        var month = result[0]['month'];
+                        var day = result[0]['day'];
+                        var second = result[0]['second'];
+                        var hour = parseInt(second / 3600);
+                        var minute = parseInt(second % 3600 / 60);
+                        second = second % 3600 % 60;
+
+                        timeline.shift();
+                        timeline.push(year + '-' + month + '-' + day + '-' + hour + '-' + minute + '-' + second);
+
+                        for (var states_idx = 0; states_idx < states.length; states_idx++) {
+                            action_data[states_idx].shift();
+                            action_data[states_idx].push(states[states_idx]);
+                        }
+
+                        good_chart.setOption({
+                            xAxis: [
+                                {
+                                    data: timeline
+                                }
+                            ],
+                            series: [{
+                                name: '听课',
+                                data: action_data[0]
+                            },
+                                {
+                                    name: '写字',
+                                    data: action_data[1]
+                                },
+                                {
+                                    name: '读书',
+                                    data: action_data[5]
+                                }]
+                        });
+
+                        bad_chart.setOption({
+                            xAxis: [
+                                {
+                                    data: timeline
+                                }
+                            ],
+                            series: [{
+                                name: '趴桌子',
+                                data: action_data[2]
+                            },
+                                {
+                                    name: '玩',
+                                    data: action_data[3]
+                                },
+                                {
+                                    name: '扭头',
+                                    data: action_data[4]
+                                },
+                                {
+                                    name: '交谈',
+                                    data: action_data[6]
+                                }]
+                        });
+                    }
+
+                },
+                error: function (errorMsg) {
+                }
+            })
+        }
+
+
+        $(document).ready(function () {
+            var action_second_good_chart = init_action_good_echart('action_second_good');
+            var action_second_bad_chart = init_action_bad_echart('action_second_bad');
+            
+            window.addEventListener("resize", function () {
+                action_second_good_chart.resize();
+                action_second_bad_chart.resize();
+            });
+
+            setInterval(update_echarts_data, 5000, action_second_good_chart, action_second_bad_chart);
+        });
+
+    </script>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="action_second_good" class="col-md-6" style="width:100%;height:150px;margin-top: 10px;">
+        </div>
+        <div id="action_second_bad" class="col-md-6" style="width:100%;height:150px;margin-top: 10px;">
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+</html>

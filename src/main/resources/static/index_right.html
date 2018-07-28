@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Demo</title>
+    <!-- 引入 echarts.js -->
+    <script src="js/echarts.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/echarts-liquidfill.min.js"></script>
+
+    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+
+
+    <script type="text/javascript">
+        function init_stu_count_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var echartsOption = {
+                title: {
+                    text: '实时人数统计',
+                },
+                series: [{
+                    type: 'liquidFill',
+                    data: [0],
+                    itemStyle: {
+                        normal: {
+                            shadowBlur: 0
+                        }
+                    },
+                    outline: {
+                        borderDistance: 0,
+                        itemStyle: {
+                            borderWidth: 5,
+                            borderColor: '#156ACF',
+                            shadowBlur: 20,
+                            shadowColor: 'rgba(255, 0, 0, 1)'
+                        }
+                    },
+                    label: {
+                        formatter: "0"
+                    },
+                    radius: "80%",
+                    amplitude: "5%",
+                    waveLength: "100%",
+                    // animationDuration: 400,
+                    // animationDurationUpdate: 100,
+                }],
+            }
+
+            myChart.setOption(echartsOption);
+
+            return myChart;
+        }
+
+        function init_action_minute_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var echartsOption = {
+                backgroundColor: '#2c343c',
+                title: {
+                    text: '课堂行为评定',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#ccc'
+                    }
+                },
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b} : {c} ({d}%)"
+                },
+                visualMap: {
+                    show: false,
+                    type: 'continuous',
+                    min: 0,
+                    max: 400,
+                    text: ['High', 'Low'],
+                    realtime: true,
+                    calculable: true,
+                    inRange: {
+                        color: ['orangered', 'yellow', 'lightskyblue'],
+                        symbolSize: [30, 100]
+                    }
+
+                },
+                series: [
+                    {
+                        name: '课堂行为',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '50%'],
+                        data: [],
+                        roseType: 'radius',
+                        label: {
+                            normal: {
+                                textStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                },
+                                smooth: 0.2,
+                                length: 10,
+                                length2: 20
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#c23531',
+                                shadowBlur: 200,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+
+                        animationType: 'scale',
+                        animationEasing: 'elasticOut',
+                        // animationDelay: function (idx) {
+                        //     return Math.random() * 200;
+                        // }
+                    }
+                ],
+
+                // animationDuration: function (idx) {
+                //     return 400;
+                // }
+            };
+
+            myChart.setOption(echartsOption);
+
+            return myChart;
+        }
+
+        function init_action_second_count_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var option = {
+                title: {
+                    text: '实时行为分析'
+                },
+                color: ['#3398DB'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ['听课', '写字', '趴桌子', '玩', '扭头', '阅读', '说话'],
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        show: false
+                    }
+                ],
+                series: [
+                    {
+                        name: '行为计数',
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: [],
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                    }
+                ],
+                // animationDuration: function (idx) {
+                //     return 400;
+                // }
+            };
+
+            myChart.setOption(option);
+
+            return myChart;
+        }
+
+        function init_action_pos_echart(div_id) {
+            var myChart = echarts.init(document.getElementById(div_id));
+
+            var option = {
+                title: {
+                    text: '课堂活跃度'
+                },
+                color: ['#3398DB'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis:
+                    {
+                        type: 'value',
+                        show: false
+                    },
+                yAxis:
+                    {
+                        type: 'category',
+                        data: ['回答问题次数', '举手次数', '举手人数'],
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    },
+
+                series: [
+                    {
+                        name: '计数',
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: [10, 14, 3],
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                    }
+                ],
+                // animationDuration: function (idx) {
+                //     return 400;
+                // }
+            };
+
+            myChart.setOption(option);
+
+            return myChart;
+        }
+
+        function update_stu_count_echart(chart) {
+            $.ajax({
+                type: "get",
+                url: "/api/getLastestDetCount",
+                data: {},
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        var stu_count = result;
+                        chart.setOption({
+                            series: [{
+                                data: [stu_count / 40],
+                                label: {
+                                    formatter: stu_count.toString()
+                                }
+                            }]
+                        });
+                    }
+
+                },
+                error: function (errorMsg) {
+                    // chart.hideLoading();
+                }
+            })
+        }
+
+        function update_echarts_data(second_chart) {
+            $.ajax({
+                type: "get",
+                url: "/api/getLastActionData",
+                data: {},
+                dataType: "json",
+                success: function (result) {
+                    if (result && result.length > 0) {
+                        var states = [0, 0, 0, 0, 0, 0, 0];
+                        for (var reuslt_idx = 0; reuslt_idx < result.length; reuslt_idx++) {
+                            states[result[reuslt_idx]["state"]] += 1
+                        }
+
+                        second_chart.setOption({
+                            series: [{
+                                name: '行为计数',
+                                data: states
+                            }]
+                        });
+                    }
+
+                },
+                error: function (errorMsg) {
+                }
+            })
+        }
+
+        var state_map = ['听课','写字','趴桌子','玩','扭头','读书','交谈'];
+        function update_action_minute_echart(chart) {
+            $.ajax({
+                type: "get",
+                url: "/api/getLastActionTime",
+                data: {},
+                dataType: "json",
+                success: function (result) {
+                    if (result && result.length > 0) {
+                        var data = [];
+                        for(var i=0;i<result.length;i++){
+                            var time = result[i]["time"];
+                            var state_idx = result[i]["state"];
+                            if(state_idx >= 0 && state_idx < stu_state_count){
+                                data.push({value:time,name: state_map[state_idx]});
+                            }
+                        }
+
+                        chart.setOption({
+                            series: [{
+                                name: '课堂行为',
+                                data: data.sort(function (a, b) {
+                                    return a.value - b.value;
+                                })
+                            }]
+                        });
+                    }
+
+                },
+                error: function (errorMsg) {
+                    // chart.hideLoading();
+                }
+            })
+        }
+
+
+        $(document).ready(function () {
+            var stu_count_chart = init_stu_count_echart('stu_count');
+            var action_minute_chart = init_action_minute_echart('action_minute');
+            var action_second_count_chart = init_action_second_count_echart('action_second_count');
+            var action_pos_chart = init_action_pos_echart('action_pos');
+            
+            window.addEventListener("resize", function () {
+                stu_count_chart.resize();
+                action_minute_chart.resize();
+                action_second_count_chart.resize();
+                action_pos_chart.resize();
+            });
+
+            setInterval(update_echarts_data, 5000, action_second_count_chart);
+            setInterval(update_stu_count_echart, 5000, stu_count_chart);
+            setInterval(update_action_minute_echart, 5000, action_minute_chart);
+        });
+
+
+    </script>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="stu_count" class="col-md-6" style="width:100%;height:200px;">
+        </div>
+        <div id="action_minute" class="col-md-6" style="width:100%;height:200px;">
+        </div>
+    </div>
+    <div class="row">
+        <div id="action_second_count" class="col-md-6" style="width:100%;height:200px;">
+        </div>
+        <div id="action_pos" class="col-md-6" style="width:100%;height:200px;">
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+</html>
