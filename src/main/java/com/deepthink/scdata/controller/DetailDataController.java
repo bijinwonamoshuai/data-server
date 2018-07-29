@@ -57,14 +57,14 @@ public class DetailDataController {
                     String begine=sdf.format(begin);
                     Date stop=course.get(i).getEndTime();
                     String stope=sdf.format(stop);
-                   // Date date=new Date();
-                    //SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
-                    //String week=dateFm.format(date);
-                    //teacho.setWeek(week);
-                   // teacho.setStartTime(begine);
-                   // teacho.setEndTime(stope);
-                    //teacho.setCourseid(course.get(i).getCourid());
-                    //teacho.setTeacherid(course.get(i).getTeacherid());
+                    Date date=new Date();
+                    SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
+                    String week=dateFm.format(date);
+                    teacho.setWeek(week);
+                    teacho.setStartTime(begine);
+                    teacho.setEndTime(stope);
+                    teacho.setCourseid(course.get(i).getCourid());
+                    teacho.setTeacherid(course.get(i).getTeacherid());
                     //teacho.setTeacherid();
                     //获取课程名
                    // String cname = course.get(i).getCname();
