@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,16 +50,29 @@ public class DetailDataController {
             for (int i = 0; i < course.size(); i++) {
                 Long start = course.get(i).getStartTime().getTime();
                 Long end = course.get(i).getEndTime().getTime();
-
                 Long temp = System.currentTimeMillis();
                 if ((temp.longValue() > start.longValue()) && (temp.longValue() < end.longValue())) {
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date begin=course.get(i).getStartTime();
+                    String begine=sdf.format(begin);
+                    Date stop=course.get(i).getEndTime();
+                    String stope=sdf.format(stop);
+                    Date date=new Date();
+                    SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
+                    String week=dateFm.format(date);
+                    teacho.setWeek(week);
+                    teacho.setStartTime(begine);
+                    teacho.setEndTime(stope);
+                    //teacho.setCourseid(course.get(i).getCourid());
+                    //teacho.setTeacherid(course.get(i).getTeacherid());
+                    //teacho.setTeacherid();
                     //获取课程名
-                    String cname = course.get(i).getCname();
+                   // String cname = course.get(i).getCname();
                     //一个课程可能有多个老师教，所以根据班级号与课程名共同获取唯一的教师名
-                    String tname = actionDetailDao.getTnameByIdAndCname(tid,cname);
+                    //String tname = actionDetailDao.getTnameByIdAndCname(tid,cname);
                     teacho.setStatus(0);
-                    teacho.setTname(tname);
-                    teacho.setCname(cname);
+                    //teacho.setTname(tname);
+                   // teacho.setCname(cname);
                     break A;
                 } else {
                     teacho.setStatus(1);
